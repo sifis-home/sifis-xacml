@@ -23,16 +23,13 @@
         "privacy": [
           {
             "name": "LogEnergyConsumption",
-            "description": "The execution allows the app to register information 
-about energy consumption.",
-            "risk_score": null
+            "description": "The execution allows the app to register information about energy consumption."
           }
         ],
         "financial": [
           {
             "name": "ElectricEnergyConsumption",
-            "description": "The execution enables the device to consume further 
-electricity.",
+            "description": "The execution enables the device to consume further electricity.",
             "risk_score": 5
           }
         ]
