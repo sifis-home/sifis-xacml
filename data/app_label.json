@@ -1,5 +1,5 @@
 {
-  "app_name": "app_name",
+  "app_name": "my_app",
   "app_description": "app_description",
   "sifis_version": "0.1",
   "api_labels": [
@@ -31,6 +31,43 @@
             "name": "ElectricEnergyConsumption",
             "description": "The execution enables the device to consume further electricity.",
             "risk_score": 5
+          }
+        ]
+      }
+    },
+    {
+      "api_name": "turn_oven_off",
+      "api_description": "Turns off an oven.",
+      "behavior_label": [
+        {
+          "device_type": "oven",
+          "action": "turn_off"
+        }
+      ],
+      "security_label": {
+        "safety": [
+          {
+            "name": "FireHazard",
+            "description": "The execution may cause fire.",
+            "risk_score": 10
+          },
+          {
+            "name": "PowerOutage",
+            "description": "The execution may cause an interruption in the supply of electricity.",
+            "risk_score": 10
+          }
+        ],
+        "privacy": [
+          {
+            "name": "LogEnergyConsumption",
+            "description": "The execution allows the app to register information about energy consumption."
+          }
+        ],
+        "financial": [
+          {
+            "name": "ElectricEnergyConsumption",
+            "description": "The execution enables the device to consume further electricity.",
+            "risk_score": 10
           }
         ]
       }
