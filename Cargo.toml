@@ -1,0 +1,16 @@
+[package]
+name = "sifis-xacml"
+version = "0.1.0"
+authors = ["Marco Rasori <marco.rasori@iit.cnr.it>"]
+description = """
+Produces a set of XACML requests from an app label.
+"""
+repository = "https://github.com/sifis-home/sifis-xacml"
+keywords = ["xacml request", "app label"]
+license = "MIT"
+edition = "2021"
+
+[dependencies]
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
