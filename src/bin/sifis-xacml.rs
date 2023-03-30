@@ -1,65 +1,8 @@
-use serde_derive::Deserialize;
-use serde_derive::Serialize;
-
 use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
-
-/// Sifis application information.
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-pub struct AppLabel {
-    /// Application name
-    pub app_name: String,
-    /// Application description
-    pub app_description: String,
-    /// List of hazards associated to API
-    pub api_labels: Vec<ApiLabel>,
-}
-
-/// API Information.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ApiLabel {
-    /// API name
-    pub api_name: String,
-    /// API description
-    pub api_description: String,
-    /// API functionality label
-    pub behavior_label: Vec<Functionality>,
-    /// API hazards information
-    pub security_label: HazardsKinds,
-}
-
-/// Functionality kind.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Functionality {
-    /// Kind of device the API involves
-    pub device_type: String,
-    /// Kind of action over the device
-    pub action: String,
-}
-
-/// Hazards kinds.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct HazardsKinds {
-    /// Safety hazards
-    pub safety: Vec<Hazard>,
-    /// Privacy hazards
-    pub privacy: Vec<Hazard>,
-    /// Financial hazards
-    pub financial: Vec<Hazard>,
-}
-
-/// Hazard information,
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Hazard {
-    /// Name
-    pub name: String,
-    /// Description
-    pub description: String,
-    /// Optional risk score
-    pub risk_score: Option<u8>,
-}
+use manifest::AppLabel;
 
 fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn Error>> {
 
