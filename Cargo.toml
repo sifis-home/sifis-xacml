@@ -14,4 +14,6 @@ edition = "2021"
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
-manifest = { git = "https://github.com/sifis-home/manifest.git", branch = "deserializable-app-label"}
+clap = { version = "4.2.1", features = ["derive"] }
+manifest = { git = "https://github.com/sifis-home/manifest.git"}
+minijinja = { version = "0.30", features = ["source"] }
