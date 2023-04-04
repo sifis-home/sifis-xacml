@@ -80,11 +80,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         app_label.app_name
     );
 
-    for idx in 0..app_label.api_labels.len() {
+    for (idx, api_label) in app_label.api_labels.iter().enumerate() {
         let req = tmpl.render(context!(
-            app_label,
-            index => idx,
-        )).unwrap();
+            app_name => app_label.app_name,
+            api_label,
+        ))?;
 
         if opts.verbose {
             println!("{}", req);

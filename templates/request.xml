@@ -6,13 +6,13 @@
     </Attributes>
     <Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource">
         <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" IncludeInResult="false">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ app_label.app_name }}</AttributeValue>
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ app_name }}</AttributeValue>
         </Attribute>
         <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:device-type" IncludeInResult="false">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ app_label.api_labels[index].behavior_label[0].device_type }}</AttributeValue>
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ api_label.behavior_label[0].device_type }}</AttributeValue>
         </Attribute>
         <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:action" IncludeInResult="false">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ app_label.api_labels[index].behavior_label[0].action }}</AttributeValue>
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ api_label.behavior_label[0].action }}</AttributeValue>
         </Attribute>
     </Attributes>
     <Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action">
@@ -22,13 +22,13 @@
     </Attributes>
     <Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment">
         <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:environment:hazards" IncludeInResult="false">
-            {%- for hazard in app_label.api_labels[index].security_label.safety %}
+            {%- for hazard in api_label.security_label.safety %}
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ hazard.name }}</AttributeValue>;
             {%- endfor %}
-            {%- for hazard in app_label.api_labels[index].security_label.privacy %}
+            {%- for hazard in api_label.security_label.privacy %}
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ hazard.name }}</AttributeValue>;
             {%- endfor %}
-            {%- for hazard in app_label.api_labels[index].security_label.financial %}
+            {%- for hazard in api_label.security_label.financial %}
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ hazard.name }}</AttributeValue>;
             {%- endfor %}
         </Attribute>
