@@ -17,7 +17,6 @@ pub struct Context {
 }
 
 fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn Error>> {
-
     // Open the file in read-only mode with buffer.
     let file = File::open(path)?;
     let reader = BufReader::new(file);
@@ -41,30 +40,45 @@ struct Opts {
     output_path: Option<PathBuf>,
 
     /// Enable additional information about the underlying process
+    /// and print the generated XACML requests to the standard output.
     #[clap(short, long)]
     verbose: bool,
-
-    /// Enable additional information about the underlying process
-    #[clap(short, long)]
-    save: bool,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-
     let opts = Opts::parse();
 
-    //let app_label = read_app_label_from_file("data/app_label.json").unwrap();
+    // check output_path
+    // - if no output path was specified, set 'save' to false and continue;
+    // - if the output path is not an existing directory, panic.
+    // - if the output path is an existing directory, set 'save' to true
+    //   and keep the path in 'dir_path' to be used later
+    let mut dir_path = PathBuf::new();
+    let save = if let Some(val) = opts.output_path {
+        if val.is_dir() {
+            dir_path = val;
+            true
+        } else {
+            panic!("{:?} is not an existing directory.", val);
+        }
+    } else {
+        false
+    };
+
     let app_label = read_app_label_from_file(opts.app_label_path)?;
 
     let mut env = Environment::new();
     env.add_template(
         "request.xml",
-        include_str!("../../templates/request.xml"))
-        .unwrap();
+        include_str!("../../templates/request.xml"
+        ))?;
 
-    let tmpl = env.get_template("request.xml").unwrap();
+    let tmpl = env.get_template("request.xml")?;
 
-    println!("Creating XACML requests from app: \"{}\"...",app_label.app_name);
+    println!(
+        "\n> Creating XACML requests from app: \"{}\"...",
+        app_label.app_name
+    );
 
     for idx in 0..app_label.api_labels.len() {
         let req = tmpl.render(context!(
@@ -76,16 +90,23 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("{}", req);
         }
 
-        if opts.save {
+        if save {
             let mut file = File::create(
-                format!("request_{}.xml", idx + 1))?;
+                dir_path.join(format!("request_{}.xml", idx + 1)))?;
             file.write_all(req.as_ref())?;
         }
     }
 
-    print!("XACML requests created successfully");
-    if opts.save {
-        println!(" and saved to ...");
+    print!("\n> XACML requests created successfully");
+    if save {
+        println!(" and saved to {:?}", dir_path)
+    }
+    else {
+        print!("\n");
+        if !opts.verbose {
+            println!("\n> Hint: specify the option -v to print the XACML requests or \
+            -o <OUTPUT_PATH> to save the XACML requests in a specific directory.")
+        }
     }
 
     Ok(())
