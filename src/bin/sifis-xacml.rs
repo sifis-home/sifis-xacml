@@ -68,10 +68,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let app_label = read_app_label_from_file(opts.app_label_path)?;
 
     let mut env = Environment::new();
-    env.add_template(
-        "request.xml",
-        include_str!("../../templates/request.xml"
-        ))?;
+    env.add_template("request.xml", include_str!("../../templates/request.xml"))?;
 
     let tmpl = env.get_template("request.xml")?;
 
@@ -91,8 +88,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
 
         if save {
-            let mut file = File::create(
-                dir_path.join(format!("request_{}.xml", idx + 1)))?;
+            let mut file = File::create(dir_path.join(format!("request_{}.xml", idx + 1)))?;
             file.write_all(req.as_ref())?;
         }
     }
@@ -100,12 +96,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     print!("\n> XACML requests created successfully");
     if save {
         println!(" and saved to {:?}", dir_path)
-    }
-    else {
+    } else {
         print!("\n");
         if !opts.verbose {
-            println!("\n> Hint: specify the option -v to print the XACML requests or \
-            -o <OUTPUT_PATH> to save the XACML requests in a specific directory.")
+            println!(
+                "\n> Hint: specify the option -v to print the XACML requests or \
+            -o <OUTPUT_PATH> to save the XACML requests in a specific directory."
+            )
         }
     }
 
