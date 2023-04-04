@@ -41,41 +41,38 @@ struct Opts {
 
     /// Enable additional information about the underlying process
     /// and print the generated XACML requests to the standard output.
+    ///
+    /// Hint: specify the option -v to print the XACML requests or
+    /// -o <OUTPUT_PATH> to save the XACML requests in a specific directory.
     #[clap(short, long)]
     verbose: bool,
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let opts = Opts::parse();
-
-    // check output_path
-    // - if no output path was specified, set 'save' to false and continue;
-    // - if the output path is not an existing directory, panic.
-    // - if the output path is an existing directory, set 'save' to true
-    //   and keep the path in 'dir_path' to be used later
-    let mut dir_path = PathBuf::new();
-    let save = if let Some(val) = opts.output_path {
-        if val.is_dir() {
-            dir_path = val;
-            true
-        } else {
-            panic!("{:?} is not an existing directory.", val);
-        }
-    } else {
-        false
-    };
-
-    let app_label = read_app_label_from_file(opts.app_label_path)?;
-
-    let mut env = Environment::new();
-    env.add_template("request.xml", include_str!("../../templates/request.xml"))?;
+fn create_requests(opts: &Opts) -> Result<(), Box<dyn Error>> {
+    let (env, app_label) = deserialize_app_label_and_setup_env(&opts.app_label_path)?;
 
     let tmpl = env.get_template("request.xml")?;
 
-    println!(
-        "\n> Creating XACML requests from app: \"{}\"...",
-        app_label.app_name
-    );
+    for api_label in app_label.api_labels.iter() {
+        let req = tmpl.render(context!(
+            app_name => app_label.app_name,
+            api_label,
+        ))?;
+
+        if opts.verbose {
+            println!("{}", req);
+        }
+    }
+
+    println!("\n> XACML requests created successfully");
+
+    Ok(())
+}
+
+fn create_requests_and_save(opts: &Opts, dir_path: &Path) -> Result<(), Box<dyn Error>> {
+    let (env, app_label) = deserialize_app_label_and_setup_env(&opts.app_label_path)?;
+
+    let tmpl = env.get_template("request.xml")?;
 
     for (idx, api_label) in app_label.api_labels.iter().enumerate() {
         let req = tmpl.render(context!(
@@ -87,23 +84,49 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("{}", req);
         }
 
-        if save {
-            let mut file = File::create(dir_path.join(format!("request_{}.xml", idx + 1)))?;
-            file.write_all(req.as_ref())?;
-        }
+        let mut file = File::create(dir_path.join(format!("request_{}.xml", idx + 1)))?;
+        file.write_all(req.as_ref())?;
     }
+    println!(
+        "\n> XACML requests created successfully and saved to {:?}",
+        dir_path
+    );
 
-    print!("\n> XACML requests created successfully");
-    if save {
-        println!(" and saved to {:?}", dir_path)
-    } else {
-        print!("\n");
-        if !opts.verbose {
-            println!(
-                "\n> Hint: specify the option -v to print the XACML requests or \
-            -o <OUTPUT_PATH> to save the XACML requests in a specific directory."
-            )
+    Ok(())
+}
+
+fn deserialize_app_label_and_setup_env<P: AsRef<Path>>(
+    app_label_path: P,
+) -> Result<(Environment<'static>, AppLabel), Box<dyn Error>> {
+    let app_label = read_app_label_from_file(app_label_path)?;
+
+    let mut env = Environment::new();
+    env.add_template("request.xml", include_str!("../../templates/request.xml"))?;
+
+    println!(
+        "\n> Creating XACML requests from app: \"{}\"...",
+        app_label.app_name
+    );
+
+    Ok((env, app_label))
+}
+
+fn main() -> Result<(), Box<dyn Error>> {
+    let opts = Opts::parse();
+
+    // check output_path
+    // - if no output path was specified, set 'save' to false and continue;
+    // - if the output path is not an existing directory, panic.
+    // - if the output path is an existing directory, set 'save' to true
+    //   and keep the path in 'dir_path' to be used later
+    if let Some(ref val) = opts.output_path {
+        if val.is_dir() {
+            create_requests_and_save(&opts, val)?;
+        } else {
+            panic!("{:?} is not an existing directory.", val);
         }
+    } else {
+        create_requests(&opts)?;
     }
 
     Ok(())
