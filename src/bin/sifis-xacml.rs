@@ -114,7 +114,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         if val.is_dir() {
             create_requests_and_save(&opts, val)?;
         } else {
-            panic!("{:?} is not an existing directory.", val);
+            panic!(
+                "{}: not an existing directory.",
+                val.as_os_str().to_str().unwrap_or("Got an error")
+            );
         }
     } else {
         create_requests(&opts)?;
