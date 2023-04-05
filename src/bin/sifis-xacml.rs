@@ -16,17 +16,6 @@ pub struct Context {
     name: String,
 }
 
-fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn Error>> {
-    // Open the file in read-only mode with buffer.
-    let file = File::open(path)?;
-    let reader = BufReader::new(file);
-
-    // Read the JSON contents of the file as an instance of `AppLabel`.
-    let app_label = serde_json::from_reader(reader)?;
-
-    Ok(app_label)
-}
-
 #[derive(Parser, Debug)]
 struct Opts {
     /// Path to the JSON file containing the App Label
@@ -46,6 +35,17 @@ struct Opts {
     /// -o <OUTPUT_PATH> to save the XACML requests in a specific directory.
     #[clap(short, long)]
     verbose: bool,
+}
+
+fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn Error>> {
+    // Open the file in read-only mode with buffer.
+    let file = File::open(path)?;
+    let reader = BufReader::new(file);
+
+    // Read the JSON contents of the file as an instance of `AppLabel`.
+    let app_label = serde_json::from_reader(reader)?;
+
+    Ok(app_label)
 }
 
 fn create_requests(opts: &Opts) -> Result<(), Box<dyn Error>> {
