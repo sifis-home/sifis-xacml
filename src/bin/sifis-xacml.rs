@@ -36,9 +36,7 @@ fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn
     let reader = BufReader::new(file);
 
     // Read the JSON contents of the file as an instance of `AppLabel`.
-    let app_label = serde_json::from_reader(reader)?;
-
-    Ok(app_label)
+    serde_json::from_reader(reader).map_err(|e| e.into())
 }
 
 fn create_requests(opts: &Opts) -> Result<(), Box<dyn Error>> {
