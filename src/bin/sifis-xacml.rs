@@ -10,6 +10,9 @@ use manifest::{ApiLabel, AppLabel};
 
 use minijinja::{context, Environment, Template};
 
+static TEMPLATE_FILE: &str =
+    include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/", "request.xml"));
+
 #[derive(Parser, Debug)]
 struct Opts {
     /// Path to the JSON file containing the App Label
@@ -100,7 +103,7 @@ fn deserialize_app_label_and_setup_env<P: AsRef<Path>>(
     let app_label = read_app_label_from_file(app_label_path)?;
 
     let mut env = Environment::new();
-    env.add_template("request.xml", include_str!("../../templates/request.xml"))?;
+    env.add_template("request.xml", TEMPLATE_FILE)?;
 
     println!(
         "\n> Creating XACML requests from app: \"{}\"...",
