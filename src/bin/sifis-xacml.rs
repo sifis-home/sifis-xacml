@@ -13,13 +13,13 @@ use minijinja::{context, Environment, Template};
 #[derive(Parser, Debug)]
 struct Opts {
     /// Path to the JSON file containing the App Label
-    #[clap(short, value_parser)]
+    #[clap(short, value_hint = clap::ValueHint::FilePath)]
     app_label_path: PathBuf,
 
     /// Output path of the generated XACML requests.
     /// Each request file is saved with the name "request_\<x\>.xml",
     /// where \<x\> is an increasing integral starting from 1.
-    #[clap(short, value_parser)]
+    #[clap(short, value_hint = clap::ValueHint::DirPath)]
     output_path: Option<PathBuf>,
 
     /// Enable additional information about the underlying process
