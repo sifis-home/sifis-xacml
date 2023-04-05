@@ -75,7 +75,7 @@ fn create_requests_and_save(opts: &Opts, dir_path: &Path) -> Result<(), Box<dyn 
         let req = create_request(api_label, &app_label.app_name, tmpl, opts.verbose)?;
 
         let mut file = File::create(dir_path.join(format!("request_{}.xml", idx + 1)))?;
-        file.write_all(req.as_ref())?;
+        file.write_all(req.as_bytes())?;
     }
 
     println!(
