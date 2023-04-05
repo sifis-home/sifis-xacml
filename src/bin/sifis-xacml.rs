@@ -82,8 +82,12 @@ fn create_requests_and_save<P: AsRef<Path>>(
     }
 
     println!(
-        "\n> XACML requests created successfully and saved to {:?}",
-        dir_path.as_ref()
+        "\n> XACML requests created successfully and saved to: {}",
+        dir_path
+            .as_ref()
+            .as_os_str()
+            .to_str()
+            .unwrap_or("Got an error")
     );
 
     Ok(())
