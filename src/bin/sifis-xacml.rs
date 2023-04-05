@@ -56,7 +56,6 @@ fn create_request(
 
 fn create_requests(opts: &Opts) -> Result<(), Box<dyn Error>> {
     let (env, app_label) = deserialize_app_label_and_setup_env(&opts.app_label_path)?;
-
     let tmpl = env.get_template("request.xml")?;
 
     for api_label in app_label.api_labels.iter() {
@@ -70,7 +69,6 @@ fn create_requests(opts: &Opts) -> Result<(), Box<dyn Error>> {
 
 fn create_requests_and_save(opts: &Opts, dir_path: &Path) -> Result<(), Box<dyn Error>> {
     let (env, app_label) = deserialize_app_label_and_setup_env(&opts.app_label_path)?;
-
     let tmpl = env.get_template("request.xml")?;
 
     for (idx, api_label) in app_label.api_labels.iter().enumerate() {
@@ -79,6 +77,7 @@ fn create_requests_and_save(opts: &Opts, dir_path: &Path) -> Result<(), Box<dyn 
         let mut file = File::create(dir_path.join(format!("request_{}.xml", idx + 1)))?;
         file.write_all(req.as_ref())?;
     }
+
     println!(
         "\n> XACML requests created successfully and saved to {:?}",
         dir_path
