@@ -105,11 +105,6 @@ fn deserialize_app_label_and_setup_env<P: AsRef<Path>>(
 fn main() -> Result<(), Box<dyn Error>> {
     let opts = Opts::parse();
 
-    // check output_path
-    // - if no output path was specified, set 'save' to false and continue;
-    // - if the output path is not an existing directory, panic.
-    // - if the output path is an existing directory, set 'save' to true
-    //   and keep the path in 'dir_path' to be used later
     if let Some(ref val) = opts.output_path {
         if val.is_dir() {
             create_requests_and_save(&opts, val)?;
