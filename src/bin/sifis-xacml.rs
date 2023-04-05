@@ -6,9 +6,9 @@ use std::path::PathBuf;
 
 use clap::Parser;
 
-use manifest::AppLabel;
+use manifest::{ApiLabel, AppLabel};
 
-use minijinja::{context, Environment};
+use minijinja::{context, Environment, Template};
 
 #[derive(Parser, Debug)]
 struct Opts {
@@ -39,20 +39,28 @@ fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn
     serde_json::from_reader(reader).map_err(|e| e.into())
 }
 
+fn create_request(
+    api_label: &ApiLabel,
+    app_name: &str,
+    template: Template,
+    verbose: bool,
+) -> Result<String, Box<dyn Error>> {
+    let req = template.render(context!(app_name, api_label))?;
+
+    if verbose {
+        println!("{}", req);
+    }
+
+    Ok(req)
+}
+
 fn create_requests(opts: &Opts) -> Result<(), Box<dyn Error>> {
     let (env, app_label) = deserialize_app_label_and_setup_env(&opts.app_label_path)?;
 
     let tmpl = env.get_template("request.xml")?;
 
     for api_label in app_label.api_labels.iter() {
-        let req = tmpl.render(context!(
-            app_name => app_label.app_name,
-            api_label,
-        ))?;
-
-        if opts.verbose {
-            println!("{}", req);
-        }
+        create_request(api_label, &app_label.app_name, tmpl, opts.verbose)?;
     }
 
     println!("\n> XACML requests created successfully");
@@ -66,14 +74,7 @@ fn create_requests_and_save(opts: &Opts, dir_path: &Path) -> Result<(), Box<dyn 
     let tmpl = env.get_template("request.xml")?;
 
     for (idx, api_label) in app_label.api_labels.iter().enumerate() {
-        let req = tmpl.render(context!(
-            app_name => app_label.app_name,
-            api_label,
-        ))?;
-
-        if opts.verbose {
-            println!("{}", req);
-        }
+        let req = create_request(api_label, &app_label.app_name, tmpl, opts.verbose)?;
 
         let mut file = File::create(dir_path.join(format!("request_{}.xml", idx + 1)))?;
         file.write_all(req.as_ref())?;
