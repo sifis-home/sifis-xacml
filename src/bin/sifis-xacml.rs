@@ -39,6 +39,7 @@ fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn
     serde_json::from_reader(reader).map_err(|e| e.into())
 }
 
+#[inline(always)]
 fn create_request(
     api_label: &ApiLabel,
     app_name: &str,
