@@ -9,12 +9,6 @@ use clap::Parser;
 use manifest::AppLabel;
 
 use minijinja::{context, Environment};
-use serde::Serialize;
-
-#[derive(Serialize)]
-pub struct Context {
-    name: String,
-}
 
 #[derive(Parser, Debug)]
 struct Opts {
@@ -36,7 +30,6 @@ struct Opts {
     #[clap(short, long)]
     verbose: bool,
 }
-
 fn read_app_label_from_file<P: AsRef<Path>>(path: P) -> Result<AppLabel, Box<dyn Error>> {
     // Open the file in read-only mode with buffer.
     let file = File::open(path)?;
