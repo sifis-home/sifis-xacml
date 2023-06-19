@@ -1,7 +1,7 @@
 <Request xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17" CombinedDecision="false" ReturnPolicyIdList="false">
     <Attributes Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject">
         <Attribute IncludeInResult="false" AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">manifest</AttributeValue>
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">marketplace</AttributeValue>
         </Attribute>
     </Attributes>
     <Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource">
@@ -21,16 +21,32 @@
         </Attribute>
     </Attributes>
     <Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment">
-        <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:environment:hazards" IncludeInResult="false">
-            {%- for hazard in api_label.security_label.safety %}
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ hazard.name }}</AttributeValue>;
-            {%- endfor %}
-            {%- for hazard in api_label.security_label.privacy %}
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ hazard.name }}</AttributeValue>;
-            {%- endfor %}
-            {%- for hazard in api_label.security_label.financial %}
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ hazard.name }}</AttributeValue>;
-            {%- endfor %}
+        {%- for hazard in api_label.security_label.safety %}
+        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name }}" IncludeInResult="false">
+        {%- if hazard.risk_score %}
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
+        {%- else %}
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+        {%- endif %}
         </Attribute>
+        {%- endfor %}
+        {%- for hazard in api_label.security_label.privacy %}
+        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name }}" IncludeInResult="false">
+            {%- if hazard.risk_score %}
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
+            {%- else %}
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+            {%- endif %}
+        </Attribute>
+        {%- endfor %}
+        {%- for hazard in api_label.security_label.financial %}
+        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name }}" IncludeInResult="false">
+            {%- if hazard.risk_score %}
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
+            {%- else %}
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+            {%- endif %}
+        </Attribute>
+        {%- endfor %}
     </Attributes>
 </Request>
