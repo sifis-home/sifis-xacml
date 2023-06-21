@@ -22,7 +22,7 @@
     </Attributes>
     <Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment">
         {%- for hazard in api_label.security_label.safety %}
-        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name }}" IncludeInResult="false">
+        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name|kebab_case }}" IncludeInResult="false">
         {%- if hazard.risk_score %}
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
         {%- else %}
@@ -31,7 +31,7 @@
         </Attribute>
         {%- endfor %}
         {%- for hazard in api_label.security_label.privacy %}
-        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name }}" IncludeInResult="false">
+        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name|kebab_case }}" IncludeInResult="false">
             {%- if hazard.risk_score %}
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
             {%- else %}
@@ -40,7 +40,7 @@
         </Attribute>
         {%- endfor %}
         {%- for hazard in api_label.security_label.financial %}
-        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name }}" IncludeInResult="false">
+        <Attribute AttributeId="eu:sifis-home:1.0:hazard:{{ hazard.name|kebab_case }}" IncludeInResult="false">
             {%- if hazard.risk_score %}
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
             {%- else %}

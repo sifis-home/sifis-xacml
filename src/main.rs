@@ -97,12 +97,31 @@ fn create_requests_and_save<P: AsRef<Path>>(
     Ok(())
 }
 
+fn camel_to_kebab_case(input: &str) -> String {
+    let mut kebab_case = String::new();
+    let mut prev_char: Option<char> = None;
+
+    for current_char in input.chars() {
+        if let Some(prev) = prev_char {
+            if prev.is_ascii_lowercase() && current_char.is_ascii_uppercase() {
+                kebab_case.push('-');
+            }
+        }
+
+        kebab_case.push(current_char.to_ascii_lowercase());
+        prev_char = Some(current_char);
+    }
+
+    kebab_case
+}
+
 fn deserialize_app_label_and_setup_env<P: AsRef<Path>>(
     app_label_path: P,
 ) -> Result<(Environment<'static>, AppLabel), Box<dyn Error>> {
     let app_label = read_app_label_from_file(app_label_path)?;
 
     let mut env = Environment::new();
+    env.add_filter("kebab_case", camel_to_kebab_case);
     env.add_template("request.xml", TEMPLATE_FILE)?;
 
     println!(
