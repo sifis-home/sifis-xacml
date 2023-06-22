@@ -1,18 +1,17 @@
-<Request
-	xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17" CombinedDecision="false" ReturnPolicyIdList="false" >
+<Request xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17" CombinedDecision="false" ReturnPolicyIdList="false">
 	<Attributes Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject">
 		<Attribute IncludeInResult="false" AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id">
-			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">manifest</AttributeValue>
+			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">marketplace</AttributeValue>
 		</Attribute>
 	</Attributes>
 	<Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource">
 		<Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" IncludeInResult="false">
-			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">app_name</AttributeValue>
+			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">my_app</AttributeValue>
 		</Attribute>
-		<Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:device-type" IncludeInResult="false">
+		<Attribute AttributeId="eu.sifis-home:1.0:resource:device:device-type" IncludeInResult="false">
 			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">lamp</AttributeValue>
 		</Attribute>
-		<Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:action" IncludeInResult="false">
+		<Attribute AttributeId="eu.sifis-home:1.0:resource:device:action:action-id" IncludeInResult="false">
 			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">turn_on</AttributeValue>
 		</Attribute>
 	</Attributes>
@@ -22,10 +21,14 @@
 		</Attribute>
 	</Attributes>
 	<Attributes Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment">
-		<Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:environment:hazards" IncludeInResult="false">
-			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">FireHazard</AttributeValue>
-			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">LogEnergyConsumption</AttributeValue>
-			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">ElectricEnergyConsumption</AttributeValue>
+		<Attribute AttributeId="eu:sifis-home:1.0:hazard:fire-hazard" IncludeInResult="false">
+			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
+		</Attribute>
+		<Attribute AttributeId="eu:sifis-home:1.0:hazard:log-energy-consumption" IncludeInResult="false">
+			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#boolean">true</AttributeValue>
+		</Attribute>
+		<Attribute AttributeId="eu:sifis-home:1.0:hazard:electric-energy-consumption" IncludeInResult="false">
+			<AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10</AttributeValue>
 		</Attribute>
 	</Attributes>
 </Request>
