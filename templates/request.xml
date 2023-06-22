@@ -8,10 +8,10 @@
         <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" IncludeInResult="false">
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ app_name }}</AttributeValue>
         </Attribute>
-        <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:device:device-type" IncludeInResult="false">
+        <Attribute AttributeId="eu.sifis-home:1.0:resource:device:device-type" IncludeInResult="false">
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ api_label.behavior_label[0].device_type }}</AttributeValue>
         </Attribute>
-        <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:device:action:action-id" IncludeInResult="false">
+        <Attribute AttributeId="eu.sifis-home:1.0:resource:device:action:action-id" IncludeInResult="false">
             <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ api_label.behavior_label[0].action }}</AttributeValue>
         </Attribute>
     </Attributes>
